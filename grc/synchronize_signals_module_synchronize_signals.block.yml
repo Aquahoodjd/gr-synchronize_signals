@@ -1,0 +1,56 @@
+id: synchronize_signals_module_synchronize_signals
+label: Synchronize Signals
+category: '[Custom Modules]'
+
+parameters:
+- id: type
+  label: Type
+  dtype: enum
+  options: [complex, float, int, short, byte]
+  option_attributes:
+      size: [gr.sizeof_gr_complex, gr.sizeof_float, gr.sizeof_int, gr.sizeof_short,
+          gr.sizeof_char]
+- id: vlen
+  label: Vector Length
+  dtype: int
+  default: '1'
+  hide: ${ 'part' if vlen == 1 else 'none' }
+- id: synchronize
+  label: Synchronization State
+  dtype: bool
+  default: 'False'
+  options: ['False', 'True']
+
+inputs:
+- domain: stream
+  dtype: ${ type }
+  vlen: ${ vlen }
+  multiplicity: 2
+
+outputs:
+- domain: stream
+  dtype: ${ type }
+  vlen: ${ vlen }
+  multiplicity: 2
+
+asserts:
+- ${ vlen > 0 }
+
+templates:
+  imports: from gnuradio import synchronize_signals_module
+  make: |-
+    synchronize_signals_module.synchronize_signals(${type.size}*${vlen},${synchronize})
+    self.${id}.set_synchronization(${synchronize})
+  callbacks:
+  - set_synchronization(${synchronize})
+
+cpp_templates:
+    includes: ['#include <gnuradio/synchronize_signals_module/synchronize_signals.h>']
+    declarations: 'synchronize_signals_module::synchronize_signals::sptr ${id};'
+    make: |-
+        this->${id} = synchronize_signals_module::synchronize_signals::make(${type.size}*${vlen},${synchronize});
+        self->${id}.set_synchronization(${synchronize});
+    callbacks:
+    - set_synchronization(${synchronize})
+    
+file_format: 1

@@ -1,0 +1,32 @@
+find_package(PkgConfig)
+
+PKG_CHECK_MODULES(PC_GR_SYNCHRONIZE_SIGNALS_MODULE gnuradio-synchronize_signals_module)
+
+FIND_PATH(
+    GR_SYNCHRONIZE_SIGNALS_MODULE_INCLUDE_DIRS
+    NAMES gnuradio/synchronize_signals_module/api.h
+    HINTS $ENV{SYNCHRONIZE_SIGNALS_MODULE_DIR}/include
+        ${PC_SYNCHRONIZE_SIGNALS_MODULE_INCLUDEDIR}
+    PATHS ${CMAKE_INSTALL_PREFIX}/include
+          /usr/local/include
+          /usr/include
+)
+
+FIND_LIBRARY(
+    GR_SYNCHRONIZE_SIGNALS_MODULE_LIBRARIES
+    NAMES gnuradio-synchronize_signals_module
+    HINTS $ENV{SYNCHRONIZE_SIGNALS_MODULE_DIR}/lib
+        ${PC_SYNCHRONIZE_SIGNALS_MODULE_LIBDIR}
+    PATHS ${CMAKE_INSTALL_PREFIX}/lib
+          ${CMAKE_INSTALL_PREFIX}/lib64
+          /usr/local/lib
+          /usr/local/lib64
+          /usr/lib
+          /usr/lib64
+          )
+
+include("${CMAKE_CURRENT_LIST_DIR}/gnuradio-synchronize_signals_moduleTarget.cmake")
+
+INCLUDE(FindPackageHandleStandardArgs)
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(GR_SYNCHRONIZE_SIGNALS_MODULE DEFAULT_MSG GR_SYNCHRONIZE_SIGNALS_MODULE_LIBRARIES GR_SYNCHRONIZE_SIGNALS_MODULE_INCLUDE_DIRS)
+MARK_AS_ADVANCED(GR_SYNCHRONIZE_SIGNALS_MODULE_LIBRARIES GR_SYNCHRONIZE_SIGNALS_MODULE_INCLUDE_DIRS)
