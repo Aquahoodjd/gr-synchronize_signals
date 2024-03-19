@@ -22,17 +22,17 @@ using output_type = gr_complex;
 
 const double PI = 3.14159265358979323846;
 
-synchronize_signals::sptr synchronize_signals::make(size_t itemsize, bool synchronize, int fft_size)
+synchronize_signals::sptr synchronize_signals::make(int fft_size, bool synchronize)
 {
-    return gnuradio::make_block_sptr<synchronize_signals_impl>(itemsize, synchronize, fft_size);
+    return gnuradio::make_block_sptr<synchronize_signals_impl>(fft_size, synchronize);
 }
 
-synchronize_signals_impl::synchronize_signals_impl(size_t itemsize, bool synchronize, int fft_size)
+synchronize_signals_impl::synchronize_signals_impl(int fft_size, bool synchronize)
     : gr::sync_block("synchronize_signals",
                      gr::io_signature::make(
-                         2 /* min inputs */, 2 /* max inputs */, itemsize),
+                         2 /* min inputs */, 2 /* max inputs */, fft_size * sizeof(gr_complex)),
                      gr::io_signature::make(
-                         2 /* min outputs */, 2 /*max outputs */, itemsize)),
+                         2 /* min outputs */, 2 /*max outputs */, fft_size * sizeof(gr_complex))),
         d_synchronize(synchronize),
         d_synchronize_state(false),
         i(0),
@@ -50,10 +50,11 @@ int synchronize_signals_impl::work(int noutput_items,
         d_synchronize_state = d_synchronize;
         std::cout << "Change" << std::endl;
     }
-    if (d_synchronize == true){
-        const input_type* in1 = static_cast<const input_type*>(input_items[0]);
-        const input_type* in2 = static_cast<const input_type*>(input_items[1]);
 
+    const input_type* in1 = static_cast<const input_type*>(input_items[0]);
+    const input_type* in2 = static_cast<const input_type*>(input_items[1]);
+
+    if (d_synchronize == true){
         fft_complex_fwd fft_fwd1(d_fft_size);
         fft_complex_fwd fft_fwd2(d_fft_size);
         fft_complex_rev fft_rev(d_fft_size);
@@ -77,8 +78,8 @@ int synchronize_signals_impl::work(int noutput_items,
 
         // Find the index of the maximum value
         double max_norm = std::norm(fft_rev.get_outbuf()[0]);
-        size_t index = 0;
-        for (size_t i = 1; i < static_cast<size_t>(d_fft_size); ++i) {
+        int index = 0;  // Change size_t to int
+        for (int i = 1; i < d_fft_size; ++i) {  // Change size_t to int
             double curr_norm = std::norm(fft_rev.get_outbuf()[i]);
             if (curr_norm > max_norm) {
                 max_norm = curr_norm;
@@ -86,28 +87,30 @@ int synchronize_signals_impl::work(int noutput_items,
             }
         }
 
-        if(i%1000 == 0){
+        // Unwrap the index if it's greater than half of the FFT size
+        if (index > d_fft_size / 2) {
+            index -= d_fft_size;  // No need to cast to int, index is already int
+        }
+
+        if(i%10 == 0){
             std::cout << "Index of maximum correlation: " << index << std::endl;
         }
         i++;
         
         output_type* out1 = static_cast<output_type*>(output_items[0]);
-        std::copy(in1, in1 + d_fft_size, out1);
-
         output_type* out2 = static_cast<output_type*>(output_items[1]);
+        std::copy(in1, in1 + d_fft_size, out1);
         std::copy(in2, in2 + d_fft_size, out2);
     }else{
-        const input_type* in1 = static_cast<const input_type*>(input_items[0]);
         output_type* out1 = static_cast<output_type*>(output_items[0]);
-        std::copy(in1, in1 + noutput_items, out1);
-
-        const input_type* in2 = static_cast<const input_type*>(input_items[1]);
         output_type* out2 = static_cast<output_type*>(output_items[1]);
-        std::copy(in2, in2 + noutput_items, out2);
+        std::copy(in1, in1 + d_fft_size, out1);
+        std::copy(in2, in2 + d_fft_size, out2);
     }
 
     return noutput_items;
 }
+
 
 } /* namespace synchronize_signals_module */
 } /* namespace gr */

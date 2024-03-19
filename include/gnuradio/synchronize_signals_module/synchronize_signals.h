@@ -32,11 +32,10 @@ public:
      * synchronize_signals_module::synchronize_signals's constructor is in a private
      * implementation class. synchronize_signals_module::synchronize_signals::make is the
      * public interface for creating new instances.
-     * \param itemsize size of the input and output items
      * \param synchronize The new synchronize state
      * \param fft_size Size of FFT
      */
-    static sptr make(size_t itemsize, bool synchronize, int fft_size);
+    static sptr make(int fft_size, bool synchronize);
      /*!
      * \brief Set the synchronize state
      *

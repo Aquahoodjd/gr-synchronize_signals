@@ -3,47 +3,35 @@ label: Synchronize Signals
 category: '[Custom Modules]'
 
 parameters:
-- id: type
-  label: Type
-  dtype: enum
-  options: [complex, float, int, short, byte]
-  option_attributes:
-      size: [gr.sizeof_gr_complex, gr.sizeof_float, gr.sizeof_int, gr.sizeof_short,
-          gr.sizeof_char]
-- id: vlen
-  label: Vector Length
+- id: fft_size
+  label: FFT Size
   dtype: int
-  default: '1'
-  hide: ${ 'part' if vlen == 1 else 'none' }
+  default: '32768'
 - id: synchronize
   label: Synchronization State
   dtype: bool
   default: 'False'
   options: ['False', 'True']
-- id: fft_size
-  label: FFT Size
-  dtype: int
-  default: '32768'
 
 inputs:
 - domain: stream
-  dtype: ${ type }
-  vlen: ${ vlen }
+  dtype: complex
+  vlen: ${ fft_size }
   multiplicity: 2
 
 outputs:
 - domain: stream
-  dtype: ${ type }
-  vlen: ${ vlen }
+  dtype: complex
+  vlen: ${ fft_size }
   multiplicity: 2
 
 asserts:
-- ${ vlen > 0 }
+- ${ fft_size > 0 }
 
 templates:
   imports: from gnuradio import synchronize_signals_module
   make: |-
-    synchronize_signals_module.synchronize_signals(${type.size}*${vlen},${synchronize},${fft_size})
+    synchronize_signals_module.synchronize_signals(${fft_size},${synchronize})
     self.${id}.set_synchronization(${synchronize})
   callbacks:
   - set_synchronization(${synchronize})
@@ -52,7 +40,7 @@ cpp_templates:
     includes: ['#include <gnuradio/synchronize_signals_module/synchronize_signals.h>']
     declarations: 'synchronize_signals_module::synchronize_signals::sptr ${id};'
     make: |-
-        this->${id} = synchronize_signals_module::synchronize_signals::make(${type.size}*${vlen},${synchronize},${fft_size});
+        this->${id} = synchronize_signals_module::synchronize_signals::make(${fft_size},${synchronize});
         self->${id}.set_synchronization(${synchronize});
     callbacks:
     - set_synchronization(${synchronize})

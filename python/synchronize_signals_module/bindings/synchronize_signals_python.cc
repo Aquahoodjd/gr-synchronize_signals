@@ -23,9 +23,8 @@ void bind_synchronize_signals(py::module& m)
     py::class_<synchronize_signals, gr::sync_block, gr::block, gr::basic_block,
         std::shared_ptr<synchronize_signals>>(m, "synchronize_signals", D(synchronize_signals))
         .def(py::init(&synchronize_signals::make),
-            py::arg("itemsize"),
-            py::arg("synchronize"),
             py::arg("fft_size"),
+            py::arg("synchronize"),
             D(synchronize_signals,make))
         .def("set_synchronization",
             &synchronize_signals::set_synchronization,
