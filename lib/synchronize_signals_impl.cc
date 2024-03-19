@@ -92,7 +92,9 @@ int synchronize_signals_impl::work(int noutput_items,
         }
 
         // Calculate the phase difference at the point of maximum correlation
-        double phase_difference = std::arg(fft_rev.get_outbuf()[index]);
+        int adjusted_index = index < 0 ? index + d_fft_size : index;
+        double phase_difference = std::arg(fft_rev.get_outbuf()[adjusted_index]);
+
 
         if(i%10 == 0){
             std::cout << "Index of maximum correlation: " << index << std::endl;
