@@ -33,16 +33,16 @@ options:
     state: enabled
 
 blocks:
-- name: delay
+- name: delay_1
   id: variable_qtgui_range
   parameters:
     comment: ''
     gui_hint: ''
-    label: ''
+    label: Delay 1
     min_len: '200'
     orient: QtCore.Qt.Horizontal
     rangeType: float
-    start: '-1000'
+    start: '1'
     step: '1'
     stop: '1000'
     value: '50'
@@ -52,6 +52,27 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [384, 12.0]
+    rotation: 0
+    state: true
+- name: delay_2
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: Delay 2
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '1'
+    step: '1'
+    stop: '1000'
+    value: '50'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [504, 12.0]
     rotation: 0
     state: true
 - name: samp_rate
@@ -80,7 +101,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [504, 12.0]
+    coordinate: [648, 12.0]
     rotation: 0
     state: true
 - name: vector_length
@@ -128,10 +149,10 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [40, 316.0]
+    coordinate: [48, 316.0]
     rotation: 0
     state: true
-- name: blocks_add_const_vxx_0_0
+- name: blocks_add_const_vxx_0_0_0
   id: blocks_add_const_vxx
   parameters:
     affinity: ''
@@ -146,10 +167,10 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1976, 388.0]
+    coordinate: [2088, 468.0]
     rotation: 0
-    state: true
-- name: blocks_argmax_xx_0_0
+    state: enabled
+- name: blocks_argmax_xx_0_0_0
   id: blocks_argmax_xx
   parameters:
     affinity: ''
@@ -164,9 +185,43 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1664, 408.0]
+    coordinate: [1528, 384.0]
     rotation: 0
     state: true
+- name: blocks_argmax_xx_0_0_0_0
+  id: blocks_argmax_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '1'
+    type: float
+    vlen: vector_length
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1736, 472.0]
+    rotation: 0
+    state: true
+- name: blocks_complex_to_arg_0
+  id: blocks_complex_to_arg
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2064, 304.0]
+    rotation: 0
+    state: enabled
 - name: blocks_complex_to_mag_0_0
   id: blocks_complex_to_mag
   parameters:
@@ -180,7 +235,39 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1432, 356.0]
+    coordinate: [1584, 204.0]
+    rotation: 0
+    state: true
+- name: blocks_complex_to_mag_0_0_0
+  id: blocks_complex_to_mag
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: int(vector_length)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1328, 396.0]
+    rotation: 0
+    state: true
+- name: blocks_complex_to_mag_0_0_0_0
+  id: blocks_complex_to_mag
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: int(vector_length)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1536, 484.0]
     rotation: 0
     state: true
 - name: blocks_delay_0
@@ -189,7 +276,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    delay: delay
+    delay: delay_1
     maxoutbuf: '0'
     minoutbuf: '0'
     num_ports: '1'
@@ -200,7 +287,27 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [424, 396.0]
+    coordinate: [488, 204.0]
+    rotation: 0
+    state: true
+- name: blocks_delay_0_0
+  id: blocks_delay
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    delay: delay_2
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_ports: '1'
+    showports: 'False'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [376, 444.0]
     rotation: 0
     state: true
 - name: blocks_delay_1
@@ -220,10 +327,30 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1104, 356.0]
+    coordinate: [1256, 204.0]
     rotation: 0
-    state: true
-- name: blocks_null_sink_0_0
+    state: enabled
+- name: blocks_delay_1_0
+  id: blocks_delay
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    delay: int(vector_length/2)
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_ports: '1'
+    showports: 'False'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1176, 444.0]
+    rotation: 0
+    state: enabled
+- name: blocks_null_sink_0_0_0
   id: blocks_null_sink
   parameters:
     affinity: ''
@@ -237,7 +364,41 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1888, 440.0]
+    coordinate: [1768, 416.0]
+    rotation: 0
+    state: true
+- name: blocks_null_sink_0_0_0_0
+  id: blocks_null_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    bus_structure_sink: '[[0,],]'
+    comment: ''
+    num_inputs: '1'
+    type: short
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1976, 504.0]
+    rotation: 0
+    state: true
+- name: blocks_phase_shift_0
+  id: blocks_phase_shift
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    is_radians: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    shift: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [328, 192.0]
     rotation: 0
     state: true
 - name: blocks_stream_to_vector_0
@@ -255,7 +416,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [464, 320.0]
+    coordinate: [448, 344.0]
     rotation: 0
     state: true
 - name: blocks_stream_to_vector_0_0
@@ -273,7 +434,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [448, 360.0]
+    coordinate: [448, 376.0]
     rotation: 0
     state: true
 - name: blocks_stream_to_vector_0_1
@@ -291,7 +452,43 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1256, 360.0]
+    coordinate: [1408, 208.0]
+    rotation: 0
+    state: true
+- name: blocks_stream_to_vector_0_1_1
+  id: blocks_stream_to_vector
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_items: int(vector_length)
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1120, 360.0]
+    rotation: 0
+    state: true
+- name: blocks_stream_to_vector_0_1_1_0
+  id: blocks_stream_to_vector
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_items: int(vector_length)
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1328, 448.0]
     rotation: 0
     state: true
 - name: blocks_throttle2_0
@@ -312,7 +509,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [280, 332.0]
+    coordinate: [256, 332.0]
     rotation: 0
     state: true
 - name: blocks_vector_to_stream_0
@@ -330,7 +527,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [800, 296.0]
+    coordinate: [792, 296.0]
     rotation: 0
     state: true
 - name: blocks_vector_to_stream_0_0
@@ -348,10 +545,102 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [784, 424.0]
+    coordinate: [792, 424.0]
     rotation: 0
     state: true
-- name: qtgui_number_sink_0_0
+- name: epy_block_1
+  id: epy_block
+  parameters:
+    _source_code: "import numpy as np\nfrom gnuradio import gr\n\nclass blk(gr.sync_block):\n\
+      \n    def __init__(self, vectorLength = 32768):  # only default arguments here\n\
+      \        gr.sync_block.__init__(\n            self,\n            name='Get one\
+      \ value from vector',\n            in_sig=[(np.complex64,vectorLength), np.short],\n\
+      \            out_sig=[np.complex64]\n        )\n        self.vectorLength =\
+      \ vectorLength\n\n    def work(self, input_items, output_items):\n        #for\
+      \ portIndex in range(len(input_items)):\n        #    for vectorIndex in range(len(input_items[portIndex])):\n\
+      \        #        print(\"input_items[\",portIndex,\"][\",vectorIndex,\"] =\"\
+      , input_items[portIndex][vectorIndex])\n        maximumCorrelationIndex = input_items[1][len(input_items[1])-1]\n\
+      \        wantedValue = input_items[0][len(input_items[0])-1][maximumCorrelationIndex]\n\
+      \        output_items[0][0] = wantedValue\n        return 1\n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vectorLength: int(vector_length)
+  states:
+    _io_cache: ('Get one value from vector', 'blk', [('vectorLength', '32768')], [('0',
+      'complex', 32768), ('1', 'short', 1)], [('0', 'complex', 1)], '', ['vectorLength'])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1824, 288.0]
+    rotation: 0
+    state: true
+- name: qtgui_number_sink_0
+  id: qtgui_number_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    autoscale: 'False'
+    avg: '0'
+    color1: ("black", "black")
+    color10: ("black", "black")
+    color2: ("black", "black")
+    color3: ("black", "black")
+    color4: ("black", "black")
+    color5: ("black", "black")
+    color6: ("black", "black")
+    color7: ("black", "black")
+    color8: ("black", "black")
+    color9: ("black", "black")
+    comment: ''
+    factor1: '1'
+    factor10: '1'
+    factor2: '1'
+    factor3: '1'
+    factor4: '1'
+    factor5: '1'
+    factor6: '1'
+    factor7: '1'
+    factor8: '1'
+    factor9: '1'
+    graph_type: qtgui.NUM_GRAPH_NONE
+    gui_hint: ''
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    max: '1'
+    min: '-1'
+    name: '"Phase Difference"'
+    nconnections: '1'
+    type: float
+    unit1: ''
+    unit10: ''
+    unit2: ''
+    unit3: ''
+    unit4: ''
+    unit5: ''
+    unit6: ''
+    unit7: ''
+    unit8: ''
+    unit9: ''
+    update_time: '0.10'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2240, 268.0]
+    rotation: 0
+    state: true
+- name: qtgui_number_sink_0_0_0
   id: qtgui_number_sink
   parameters:
     affinity: ''
@@ -411,7 +700,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2152, 356.0]
+    coordinate: [2272, 436.0]
     rotation: 0
     state: true
 - name: qtgui_vector_sink_f_0_0
@@ -485,7 +774,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1664, 260.0]
+    coordinate: [1824, 172.0]
     rotation: 0
     state: true
 - name: synchronize_signals_module_synchronize_signals_0
@@ -508,23 +797,36 @@ blocks:
 
 connections:
 - [Correlation_0, '0', blocks_delay_1, '0']
+- [Correlation_0, '0', blocks_delay_1_0, '0']
+- [Correlation_0, '0', blocks_stream_to_vector_0_1_1, '0']
 - [analog_fastnoise_source_x_0, '0', blocks_throttle2_0, '0']
-- [blocks_add_const_vxx_0_0, '0', qtgui_number_sink_0_0, '0']
-- [blocks_argmax_xx_0_0, '0', blocks_add_const_vxx_0_0, '0']
-- [blocks_argmax_xx_0_0, '1', blocks_null_sink_0_0, '0']
-- [blocks_complex_to_mag_0_0, '0', blocks_argmax_xx_0_0, '0']
+- [blocks_add_const_vxx_0_0_0, '0', qtgui_number_sink_0_0_0, '0']
+- [blocks_argmax_xx_0_0_0, '0', epy_block_1, '1']
+- [blocks_argmax_xx_0_0_0, '1', blocks_null_sink_0_0_0, '0']
+- [blocks_argmax_xx_0_0_0_0, '0', blocks_add_const_vxx_0_0_0, '0']
+- [blocks_argmax_xx_0_0_0_0, '1', blocks_null_sink_0_0_0_0, '0']
+- [blocks_complex_to_arg_0, '0', qtgui_number_sink_0, '0']
 - [blocks_complex_to_mag_0_0, '0', qtgui_vector_sink_f_0_0, '0']
-- [blocks_delay_0, '0', blocks_stream_to_vector_0_0, '0']
+- [blocks_complex_to_mag_0_0_0, '0', blocks_argmax_xx_0_0_0, '0']
+- [blocks_complex_to_mag_0_0_0_0, '0', blocks_argmax_xx_0_0_0_0, '0']
+- [blocks_delay_0, '0', blocks_stream_to_vector_0, '0']
+- [blocks_delay_0_0, '0', blocks_stream_to_vector_0_0, '0']
 - [blocks_delay_1, '0', blocks_stream_to_vector_0_1, '0']
+- [blocks_delay_1_0, '0', blocks_stream_to_vector_0_1_1_0, '0']
+- [blocks_phase_shift_0, '0', blocks_delay_0, '0']
 - [blocks_stream_to_vector_0, '0', synchronize_signals_module_synchronize_signals_0,
   '0']
 - [blocks_stream_to_vector_0_0, '0', synchronize_signals_module_synchronize_signals_0,
   '1']
 - [blocks_stream_to_vector_0_1, '0', blocks_complex_to_mag_0_0, '0']
-- [blocks_throttle2_0, '0', blocks_delay_0, '0']
-- [blocks_throttle2_0, '0', blocks_stream_to_vector_0, '0']
+- [blocks_stream_to_vector_0_1_1, '0', blocks_complex_to_mag_0_0_0, '0']
+- [blocks_stream_to_vector_0_1_1, '0', epy_block_1, '0']
+- [blocks_stream_to_vector_0_1_1_0, '0', blocks_complex_to_mag_0_0_0_0, '0']
+- [blocks_throttle2_0, '0', blocks_delay_0_0, '0']
+- [blocks_throttle2_0, '0', blocks_phase_shift_0, '0']
 - [blocks_vector_to_stream_0, '0', Correlation_0, '0']
 - [blocks_vector_to_stream_0_0, '0', Correlation_0, '1']
+- [epy_block_1, '0', blocks_complex_to_arg_0, '0']
 - [synchronize_signals_module_synchronize_signals_0, '0', blocks_vector_to_stream_0,
   '0']
 - [synchronize_signals_module_synchronize_signals_0, '1', blocks_vector_to_stream_0_0,

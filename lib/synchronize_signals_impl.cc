@@ -48,7 +48,6 @@ int synchronize_signals_impl::work(int noutput_items,
 {
     if (d_synchronize != d_synchronize_state) {
         d_synchronize_state = d_synchronize;
-        std::cout << "Change" << std::endl;
     }
 
     const input_type* in1 = static_cast<const input_type*>(input_items[0]);
@@ -89,11 +88,15 @@ int synchronize_signals_impl::work(int noutput_items,
 
         // Unwrap the index if it's greater than half of the FFT size
         if (index > d_fft_size / 2) {
-            index -= d_fft_size;  // No need to cast to int, index is already int
+            index -= d_fft_size;
         }
+
+        // Calculate the phase difference at the point of maximum correlation
+        double phase_difference = std::arg(fft_rev.get_outbuf()[index]);
 
         if(i%10 == 0){
             std::cout << "Index of maximum correlation: " << index << std::endl;
+            std::cout << "Phase difference at point of maximum correlation: " << phase_difference << std::endl;
         }
         i++;
         
@@ -110,7 +113,5 @@ int synchronize_signals_impl::work(int noutput_items,
 
     return noutput_items;
 }
-
-
 } /* namespace synchronize_signals_module */
 } /* namespace gr */
