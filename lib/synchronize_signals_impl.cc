@@ -52,6 +52,7 @@ int synchronize_signals_impl::work(int noutput_items,
 
     const input_type* in1 = static_cast<const input_type*>(input_items[0]);
     const input_type* in2 = static_cast<const input_type*>(input_items[1]);
+    std::vector<input_type> in1_delayed(d_fft_size, 0);
 
     if (d_synchronize == true){
         fft_complex_fwd fft_fwd1(d_fft_size);
@@ -100,11 +101,20 @@ int synchronize_signals_impl::work(int noutput_items,
             std::cout << "Phase difference at point of maximum correlation: " << phase_difference << std::endl;
         }
         i++;
+
+        for (int i = 0; i < d_fft_size; ++i) 
+        {
+            int j = (i + index) % d_fft_size;
+            if (j < 0) {
+                j += d_fft_size;
+            }
+            in1_delayed[i] = in1[j];
+        }
         
         output_type* out1 = static_cast<output_type*>(output_items[0]);
         output_type* out2 = static_cast<output_type*>(output_items[1]);
-        std::copy(in1, in1 + d_fft_size, out1);
         std::copy(in2, in2 + d_fft_size, out2);
+        std::copy(in1_delayed.begin(), in1_delayed.end(), out1);
     }else{
         output_type* out1 = static_cast<output_type*>(output_items[0]);
         output_type* out2 = static_cast<output_type*>(output_items[1]);
