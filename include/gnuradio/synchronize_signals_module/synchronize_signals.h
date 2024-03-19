@@ -34,8 +34,9 @@ public:
      * public interface for creating new instances.
      * \param itemsize size of the input and output items
      * \param synchronize The new synchronize state
+     * \param fft_size Size of FFT
      */
-    static sptr make(size_t itemsize, bool synchronize);
+    static sptr make(size_t itemsize, bool synchronize, int fft_size);
      /*!
      * \brief Set the synchronize state
      *

@@ -20,6 +20,10 @@ parameters:
   dtype: bool
   default: 'False'
   options: ['False', 'True']
+- id: fft_size
+  label: FFT Size
+  dtype: int
+  default: '32768'
 
 inputs:
 - domain: stream
@@ -39,7 +43,7 @@ asserts:
 templates:
   imports: from gnuradio import synchronize_signals_module
   make: |-
-    synchronize_signals_module.synchronize_signals(${type.size}*${vlen},${synchronize})
+    synchronize_signals_module.synchronize_signals(${type.size}*${vlen},${synchronize},${fft_size})
     self.${id}.set_synchronization(${synchronize})
   callbacks:
   - set_synchronization(${synchronize})
@@ -48,7 +52,7 @@ cpp_templates:
     includes: ['#include <gnuradio/synchronize_signals_module/synchronize_signals.h>']
     declarations: 'synchronize_signals_module::synchronize_signals::sptr ${id};'
     make: |-
-        this->${id} = synchronize_signals_module::synchronize_signals::make(${type.size}*${vlen},${synchronize});
+        this->${id} = synchronize_signals_module::synchronize_signals::make(${type.size}*${vlen},${synchronize},${fft_size});
         self->${id}.set_synchronization(${synchronize});
     callbacks:
     - set_synchronization(${synchronize})

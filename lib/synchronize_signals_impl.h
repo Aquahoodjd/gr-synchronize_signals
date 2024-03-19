@@ -19,9 +19,10 @@ private:
     bool d_synchronize;
     bool d_synchronize_state;
     int i;
+    int d_fft_size;
 
 public:
-    synchronize_signals_impl(size_t itemsize, bool synchronize);
+    synchronize_signals_impl(size_t itemsize, bool synchronize, int fft_size);
     ~synchronize_signals_impl();
 
     void set_synchronization(bool synchronize) override

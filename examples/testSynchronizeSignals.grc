@@ -146,7 +146,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1976, 364.0]
+    coordinate: [1976, 388.0]
     rotation: 0
     state: true
 - name: blocks_argmax_xx_0_0
@@ -164,7 +164,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1664, 384.0]
+    coordinate: [1664, 408.0]
     rotation: 0
     state: true
 - name: blocks_complex_to_mag_0_0
@@ -180,7 +180,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1432, 348.0]
+    coordinate: [1432, 356.0]
     rotation: 0
     state: true
 - name: blocks_delay_0
@@ -200,7 +200,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [488, 372.0]
+    coordinate: [480, 372.0]
     rotation: 0
     state: true
 - name: blocks_delay_1
@@ -220,7 +220,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1104, 348.0]
+    coordinate: [1104, 356.0]
     rotation: 0
     state: true
 - name: blocks_null_sink_0_0
@@ -237,7 +237,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1888, 416.0]
+    coordinate: [1888, 440.0]
     rotation: 0
     state: true
 - name: blocks_stream_to_vector_0_1
@@ -339,7 +339,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2152, 332.0]
+    coordinate: [2152, 356.0]
     rotation: 0
     state: true
 - name: qtgui_vector_sink_f_0_0
@@ -413,7 +413,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1664, 236.0]
+    coordinate: [1664, 260.0]
     rotation: 0
     state: true
 - name: synchronize_signals_module_synchronize_signals_0
@@ -422,6 +422,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
+    fft_size: '32768'
     maxoutbuf: '0'
     minoutbuf: '0'
     synchronize: synchronize
@@ -431,7 +432,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [632, 344.0]
+    coordinate: [632, 340.0]
     rotation: 0
     state: true
 

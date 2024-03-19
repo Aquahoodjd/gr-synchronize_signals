@@ -25,6 +25,7 @@ void bind_synchronize_signals(py::module& m)
         .def(py::init(&synchronize_signals::make),
             py::arg("itemsize"),
             py::arg("synchronize"),
+            py::arg("fft_size"),
             D(synchronize_signals,make))
         .def("set_synchronization",
             &synchronize_signals::set_synchronization,

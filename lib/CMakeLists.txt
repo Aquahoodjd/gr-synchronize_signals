@@ -22,7 +22,8 @@ if(NOT synchronize_signals_module_sources)
 endif(NOT synchronize_signals_module_sources)
 
 add_library(gnuradio-synchronize_signals_module SHARED ${synchronize_signals_module_sources})
-target_link_libraries(gnuradio-synchronize_signals_module gnuradio::gnuradio-runtime ${Boost_LIBRARIES} ${GNURADIO_ALL_LIBRARIES} ${FFTW3F_LIBRARIES})
+target_link_libraries(gnuradio-synchronize_signals_module gnuradio::gnuradio-runtime gnuradio::gnuradio-fft ${Boost_LIBRARIES} ${GNURADIO_ALL_LIBRARIES} ${FFTW3F_LIBRARIES})
+
 target_include_directories(gnuradio-synchronize_signals_module
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
     PUBLIC $<INSTALL_INTERFACE:include>
