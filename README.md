@@ -1,5 +1,5 @@
 # gr-synchronize_signals_module
-This module is created to synchronize two signals in samples and phase.
+This GNU Radio module is created to synchronize two signals in samples and phase.
 Tested on GNU Radio Companion 3.10.7.0 (Python 3.10.12).
 To build and test:
 ```
