@@ -55,7 +55,7 @@ int synchronize_signals_impl::work(int noutput_items,
 
     const input_type* in1 = static_cast<const input_type*>(input_items[0]);
     const input_type* in2 = static_cast<const input_type*>(input_items[1]);
-    std::vector<input_type> in1_synchronized(d_fft_size, 0);
+    std::vector<input_type> in2_synchronized(d_fft_size, 0);
 
     if (d_synchronize == true) {
         fft_complex_fwd fft_fwd1(d_fft_size);
@@ -103,53 +103,53 @@ int synchronize_signals_impl::work(int noutput_items,
         // Copy the input signal into the new buffer with the appropriate delay
         if (index != 0) {
             for (int i = 0; i < d_fft_size; ++i) {
-                int j = (i + index) % d_fft_size;
+                int j = (i - index) % d_fft_size;
                 if (j < 0) {
                     j += d_fft_size;
                 }
-                in1_synchronized[i] = in1[j];
+                in2_synchronized[i] = in2[j];
             }
         }
 
-        // Adjust the phase of in1_synchronized based on the phase difference
+        // Adjust the phase of in2_synchronized based on the phase difference
         if (abs(phase_difference) > 0.001) {
             for (int i = 0; i < d_fft_size; ++i) {
-                double magnitude = std::abs(in1_synchronized[i]);
-                double phase = std::arg(in1_synchronized[i]) - phase_difference;
-                in1_synchronized[i] = std::polar(magnitude, phase);
+                double magnitude = std::abs(in2_synchronized[i]);
+                double phase = std::arg(in2_synchronized[i]) + phase_difference;
+                in2_synchronized[i] = std::polar(magnitude, phase);
             }
         }
 
         output_type* out1 = static_cast<output_type*>(output_items[0]);
         output_type* out2 = static_cast<output_type*>(output_items[1]);
-        std::copy(in2, in2 + d_fft_size, out2);
-        std::copy(in1_synchronized.begin(), in1_synchronized.end(), out1);
+        std::copy(in1, in1 + d_fft_size, out1);
+        std::copy(in2_synchronized.begin(), in2_synchronized.end(), out2);
     } else {
         if (index != 0 || abs(phase_difference) > 0.001) {
             // Copy the input signal into the new buffer with the appropriate delay
             if (index != 0) {
                 for (int i = 0; i < d_fft_size; ++i) {
-                    int j = (i + index) % d_fft_size;
+                    int j = (i - index) % d_fft_size;
                     if (j < 0) {
                         j += d_fft_size;
                     }
-                    in1_synchronized[i] = in1[j];
+                    in2_synchronized[i] = in2[j];
                 }
             }
 
-            // Adjust the phase of in1_synchronized based on the phase difference
+            // Adjust the phase of in2_synchronized based on the phase difference
             if (abs(phase_difference) > 0.001) {
                 for (int i = 0; i < d_fft_size; ++i) {
-                    double magnitude = std::abs(in1_synchronized[i]);
-                    double phase = std::arg(in1_synchronized[i]) - phase_difference;
-                    in1_synchronized[i] = std::polar(magnitude, phase);
+                    double magnitude = std::abs(in2_synchronized[i]);
+                    double phase = std::arg(in2_synchronized[i]) + phase_difference;
+                    in2_synchronized[i] = std::polar(magnitude, phase);
                 }
             }
 
             output_type* out1 = static_cast<output_type*>(output_items[0]);
             output_type* out2 = static_cast<output_type*>(output_items[1]);
-            std::copy(in2, in2 + d_fft_size, out2);
-            std::copy(in1_synchronized.begin(), in1_synchronized.end(), out1);
+            std::copy(in1, in1 + d_fft_size, out1);
+            std::copy(in2_synchronized.begin(), in2_synchronized.end(), out2);
         } else {
             output_type* out1 = static_cast<output_type*>(output_items[0]);
             output_type* out2 = static_cast<output_type*>(output_items[1]);
