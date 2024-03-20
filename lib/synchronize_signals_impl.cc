@@ -6,17 +6,17 @@
  */
 
 #include "synchronize_signals_impl.h"
+#include <gnuradio/fft/fft.h>
 #include <gnuradio/io_signature.h>
+#include <cmath>
 #include <complex>
 #include <vector>
-#include <cmath>
-#include <gnuradio/fft/fft.h>
 
 namespace gr {
 namespace synchronize_signals_module {
 
-using 	fft_complex_fwd = gr::fft::fft< gr_complex, true >;
-using 	fft_complex_rev = gr::fft::fft< gr_complex, false >;
+using fft_complex_fwd = gr::fft::fft<gr_complex, true>;
+using fft_complex_rev = gr::fft::fft<gr_complex, false>;
 using input_type = gr_complex;
 using output_type = gr_complex;
 
@@ -28,17 +28,18 @@ synchronize_signals::sptr synchronize_signals::make(int fft_size, bool synchroni
 }
 
 synchronize_signals_impl::synchronize_signals_impl(int fft_size, bool synchronize)
-    : gr::sync_block("synchronize_signals",
-                     gr::io_signature::make(
-                         2 /* min inputs */, 2 /* max inputs */, fft_size * sizeof(gr_complex)),
-                     gr::io_signature::make(
-                         2 /* min outputs */, 2 /*max outputs */, fft_size * sizeof(gr_complex))),
-        d_synchronize(synchronize),
-        d_synchronize_state(false),
-        i(0),
-        d_fft_size(fft_size),
-        index(0),
-        phase_difference(0)
+    : gr::sync_block(
+          "synchronize_signals",
+          gr::io_signature::make(
+              2 /* min inputs */, 2 /* max inputs */, fft_size * sizeof(gr_complex)),
+          gr::io_signature::make(
+              2 /* min outputs */, 2 /*max outputs */, fft_size * sizeof(gr_complex))),
+      d_synchronize(synchronize),
+      d_synchronize_state(false),
+      z(0),
+      d_fft_size(fft_size),
+      index(0),
+      phase_difference(0)
 {
 }
 
@@ -56,7 +57,7 @@ int synchronize_signals_impl::work(int noutput_items,
     const input_type* in2 = static_cast<const input_type*>(input_items[1]);
     std::vector<input_type> in1_synchronized(d_fft_size, 0);
 
-    if (d_synchronize == true){
+    if (d_synchronize == true) {
         fft_complex_fwd fft_fwd1(d_fft_size);
         fft_complex_fwd fft_fwd2(d_fft_size);
         fft_complex_rev fft_rev(d_fft_size);
@@ -75,12 +76,14 @@ int synchronize_signals_impl::work(int noutput_items,
         }
 
         // Perform inverse FFT to get the correlation
-        std::copy(fft_fwd1.get_outbuf(), fft_fwd1.get_outbuf() + d_fft_size, fft_rev.get_inbuf());
+        std::copy(fft_fwd1.get_outbuf(),
+                  fft_fwd1.get_outbuf() + d_fft_size,
+                  fft_rev.get_inbuf());
         fft_rev.execute();
 
         // Find the index of the maximum value
         double max_norm = std::norm(fft_rev.get_outbuf()[0]);
-        for (int i = 1; i < d_fft_size; ++i) {  // Change size_t to int
+        for (int i = 1; i < d_fft_size; ++i) { // Change size_t to int
             double curr_norm = std::norm(fft_rev.get_outbuf()[i]);
             if (curr_norm > max_norm) {
                 max_norm = curr_norm;
@@ -97,38 +100,62 @@ int synchronize_signals_impl::work(int noutput_items,
         int adjusted_index = index < 0 ? index + d_fft_size : index;
         phase_difference = std::arg(fft_rev.get_outbuf()[adjusted_index]);
 
-        // if(i%10 == 0){
-        //     std::cout << "Index of maximum correlation: " << index << std::endl;
-        //     std::cout << "Phase difference at point of maximum correlation: " << phase_difference << std::endl;
-        // }
-        // i++;
-
         // Copy the input signal into the new buffer with the appropriate delay
-        for (int i = 0; i < d_fft_size; ++i) 
-        {
-            int j = (i + index) % d_fft_size;
-            if (j < 0) {
-                j += d_fft_size;
+        if (index != 0) {
+            for (int i = 0; i < d_fft_size; ++i) {
+                int j = (i + index) % d_fft_size;
+                if (j < 0) {
+                    j += d_fft_size;
+                }
+                in1_synchronized[i] = in1[j];
             }
-            in1_synchronized[i] = in1[j];
         }
 
         // Adjust the phase of in1_synchronized based on the phase difference
-        for (int i = 0; i < d_fft_size; ++i) {
-            double magnitude = std::abs(in1_synchronized[i]);
-            double phase = std::arg(in1_synchronized[i]) - phase_difference;
-            in1_synchronized[i] = std::polar(magnitude, phase);
+        if (abs(phase_difference) > 0.001) {
+            for (int i = 0; i < d_fft_size; ++i) {
+                double magnitude = std::abs(in1_synchronized[i]);
+                double phase = std::arg(in1_synchronized[i]) - phase_difference;
+                in1_synchronized[i] = std::polar(magnitude, phase);
+            }
         }
-        
+
         output_type* out1 = static_cast<output_type*>(output_items[0]);
         output_type* out2 = static_cast<output_type*>(output_items[1]);
         std::copy(in2, in2 + d_fft_size, out2);
         std::copy(in1_synchronized.begin(), in1_synchronized.end(), out1);
-    }else{
-        output_type* out1 = static_cast<output_type*>(output_items[0]);
-        output_type* out2 = static_cast<output_type*>(output_items[1]);
-        std::copy(in1, in1 + d_fft_size, out1);
-        std::copy(in2, in2 + d_fft_size, out2);
+    } else {
+        if (index != 0 || abs(phase_difference) > 0.001) {
+            // Copy the input signal into the new buffer with the appropriate delay
+            if (index != 0) {
+                for (int i = 0; i < d_fft_size; ++i) {
+                    int j = (i + index) % d_fft_size;
+                    if (j < 0) {
+                        j += d_fft_size;
+                    }
+                    in1_synchronized[i] = in1[j];
+                }
+            }
+
+            // Adjust the phase of in1_synchronized based on the phase difference
+            if (abs(phase_difference) > 0.001) {
+                for (int i = 0; i < d_fft_size; ++i) {
+                    double magnitude = std::abs(in1_synchronized[i]);
+                    double phase = std::arg(in1_synchronized[i]) - phase_difference;
+                    in1_synchronized[i] = std::polar(magnitude, phase);
+                }
+            }
+
+            output_type* out1 = static_cast<output_type*>(output_items[0]);
+            output_type* out2 = static_cast<output_type*>(output_items[1]);
+            std::copy(in2, in2 + d_fft_size, out2);
+            std::copy(in1_synchronized.begin(), in1_synchronized.end(), out1);
+        } else {
+            output_type* out1 = static_cast<output_type*>(output_items[0]);
+            output_type* out2 = static_cast<output_type*>(output_items[1]);
+            std::copy(in1, in1 + d_fft_size, out1);
+            std::copy(in2, in2 + d_fft_size, out2);
+        }
     }
 
     return noutput_items;

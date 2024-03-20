@@ -18,7 +18,7 @@ class synchronize_signals_impl : public synchronize_signals
 private:
     bool d_synchronize;
     bool d_synchronize_state;
-    int i;
+    int z;
     int d_fft_size;
     int index;
     double phase_difference;
