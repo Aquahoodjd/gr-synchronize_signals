@@ -14,9 +14,9 @@ private:
     bool d_synchronize_state;
     int z;
     int d_fft_size;
-    int index;
-    double phase_difference;
     int d_num_ports;
+    std::vector<int> index;
+    std::vector<double> phase_difference;
 
 public:
     synchronize_signals_impl(int fft_size, bool synchronize, int num_ports);
