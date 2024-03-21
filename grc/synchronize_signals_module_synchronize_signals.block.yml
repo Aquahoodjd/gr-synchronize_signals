@@ -12,18 +12,22 @@ parameters:
   dtype: bool
   default: 'False'
   options: ['False', 'True']
+- id: num_ports
+  label: Number of ports
+  dtype: int
+  default: '2'
 
 inputs:
 - domain: stream
   dtype: complex
   vlen: ${ fft_size }
-  multiplicity: 2
+  multiplicity: ${ num_ports }
 
 outputs:
 - domain: stream
   dtype: complex
   vlen: ${ fft_size }
-  multiplicity: 2
+  multiplicity: ${ num_ports }
 
 asserts:
 - ${ fft_size > 0 }
@@ -31,7 +35,7 @@ asserts:
 templates:
   imports: from gnuradio import synchronize_signals_module
   make: |-
-    synchronize_signals_module.synchronize_signals(${fft_size},${synchronize})
+    synchronize_signals_module.synchronize_signals(${fft_size},${synchronize},${num_ports})
     self.${id}.set_synchronization(${synchronize})
   callbacks:
   - set_synchronization(${synchronize})
@@ -40,7 +44,7 @@ cpp_templates:
     includes: ['#include <gnuradio/synchronize_signals_module/synchronize_signals.h>']
     declarations: 'synchronize_signals_module::synchronize_signals::sptr ${id};'
     make: |-
-        this->${id} = synchronize_signals_module::synchronize_signals::make(${fft_size},${synchronize});
+        this->${id} = synchronize_signals_module::synchronize_signals::make(${fft_size},${synchronize},${num_ports});
         self->${id}.set_synchronization(${synchronize});
     callbacks:
     - set_synchronization(${synchronize})

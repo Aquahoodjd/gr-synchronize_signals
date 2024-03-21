@@ -27,8 +27,9 @@ public:
      * public interface for creating new instances.
      * \param synchronize The new synchronize state
      * \param fft_size Size of FFT
+     * \param num_ports Number of ports
      */
-    static sptr make(int fft_size, bool synchronize);
+    static sptr make(int fft_size, bool synchronize, int num_ports);
     /*!
      * \brief Set the synchronize state
      *

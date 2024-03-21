@@ -19,6 +19,7 @@ void bind_synchronize_signals(py::module& m)
         .def(py::init(&synchronize_signals::make),
              py::arg("fft_size"),
              py::arg("synchronize"),
+             py::arg("num_ports"),
              D(synchronize_signals, make))
         .def("set_synchronization",
              &synchronize_signals::set_synchronization,

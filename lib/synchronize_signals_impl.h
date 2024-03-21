@@ -16,9 +16,10 @@ private:
     int d_fft_size;
     int index;
     double phase_difference;
+    int d_num_ports;
 
 public:
-    synchronize_signals_impl(int fft_size, bool synchronize);
+    synchronize_signals_impl(int fft_size, bool synchronize, int num_ports);
     ~synchronize_signals_impl();
 
     void set_synchronization(bool synchronize) override { d_synchronize = synchronize; }
