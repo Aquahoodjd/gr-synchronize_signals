@@ -329,7 +329,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [632, 324.0]
+    coordinate: [632, 316.0]
     rotation: 0
     state: true
 - name: blocks_delay_0_0
@@ -440,7 +440,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [472, 312.0]
+    coordinate: [472, 304.0]
     rotation: 0
     state: true
 - name: blocks_phase_shift_0_0
@@ -475,7 +475,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [760, 328.0]
+    coordinate: [760, 320.0]
     rotation: 0
     state: true
 - name: blocks_stream_to_vector_0_0

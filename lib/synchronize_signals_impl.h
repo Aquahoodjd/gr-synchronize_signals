@@ -1,10 +1,4 @@
-/* -*- c++ -*- */
-/*
- * Copyright 2024 Witold Duda.
- *
- * SPDX-License-Identifier: GPL-3.0-or-later
- */
-
+// synchronize_signals_impl.h
 #ifndef INCLUDED_SYNCHRONIZE_SIGNALS_MODULE_SYNCHRONIZE_SIGNALS_IMPL_H
 #define INCLUDED_SYNCHRONIZE_SIGNALS_MODULE_SYNCHRONIZE_SIGNALS_IMPL_H
 
@@ -27,10 +21,7 @@ public:
     synchronize_signals_impl(int fft_size, bool synchronize);
     ~synchronize_signals_impl();
 
-    void set_synchronization(bool synchronize) override
-    {
-        d_synchronize = synchronize;
-    }
+    void set_synchronization(bool synchronize) override { d_synchronize = synchronize; }
     bool synchronize() const override { return d_synchronize; }
 
     int work(int noutput_items,

@@ -1,10 +1,3 @@
-/* -*- c++ -*- */
-/*
- * Copyright 2024 Witold Duda.
- *
- * SPDX-License-Identifier: GPL-3.0-or-later
- */
-
 #ifndef INCLUDED_SYNCHRONIZE_SIGNALS_MODULE_SYNCHRONIZE_SIGNALS_H
 #define INCLUDED_SYNCHRONIZE_SIGNALS_MODULE_SYNCHRONIZE_SIGNALS_H
 
@@ -36,7 +29,7 @@ public:
      * \param fft_size Size of FFT
      */
     static sptr make(int fft_size, bool synchronize);
-     /*!
+    /*!
      * \brief Set the synchronize state
      *
      * This method allows you to dynamically change the synchronize state of the block.

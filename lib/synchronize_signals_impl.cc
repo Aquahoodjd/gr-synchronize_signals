@@ -1,10 +1,4 @@
-/* -*- c++ -*- */
-/*
- * Copyright 2024 Witold Duda.
- *
- * SPDX-License-Identifier: GPL-3.0-or-later
- */
-
+// synchronize_signals_impl.cc
 #include "synchronize_signals_impl.h"
 #include <gnuradio/fft/fft.h>
 #include <gnuradio/io_signature.h>
