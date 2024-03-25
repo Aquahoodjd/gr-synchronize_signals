@@ -72,6 +72,7 @@ int synchronize_signals_impl::work(int noutput_items,
             // Perform forward FFT on in
             std::copy(in, in + d_fft_size, fft_fwd.get_inbuf());
             fft_fwd.execute();
+
             // Calculate the conjugate of the second FFT and multiply it with the first
             // FFT
             for (size_t i = 0; i < static_cast<size_t>(d_fft_size); ++i) {
@@ -102,14 +103,12 @@ int synchronize_signals_impl::work(int noutput_items,
             phase_difference[port] = std::arg(fft_rev.get_outbuf()[adjusted_index]);
 
             // Copy the input signal into the new buffer with the appropriate delay
-            if (index[port] != 0) {
-                for (int i = 0; i < d_fft_size; ++i) {
-                    int j = (i - index[port]) % d_fft_size;
-                    if (j < 0) {
-                        j += d_fft_size;
-                    }
-                    in_synchronized[port][i] = in[j];
+            for (int i = 0; i < d_fft_size; ++i) {
+                int j = (i - index[port]) % d_fft_size;
+                if (j < 0) {
+                    j += d_fft_size;
                 }
+                in_synchronized[port][i] = in[j];
             }
 
             // Adjust the phase of in_synchronized based on the phase difference
@@ -130,14 +129,12 @@ int synchronize_signals_impl::work(int noutput_items,
             const input_type* in = static_cast<const input_type*>(input_items[port]);
             if (index[port] != 0 || abs(phase_difference[port]) > 0.001) {
                 // Copy the input signal into the new buffer with the appropriate delay
-                if (index[port] != 0) {
-                    for (int i = 0; i < d_fft_size; ++i) {
-                        int j = (i - index[port]) % d_fft_size;
-                        if (j < 0) {
-                            j += d_fft_size;
-                        }
-                        in_synchronized[port][i] = in[j];
+                for (int i = 0; i < d_fft_size; ++i) {
+                    int j = (i - index[port]) % d_fft_size;
+                    if (j < 0) {
+                        j += d_fft_size;
                     }
+                    in_synchronized[port][i] = in[j];
                 }
 
                 // Adjust the phase of in_synchronized[port] based on the phase difference
@@ -149,6 +146,12 @@ int synchronize_signals_impl::work(int noutput_items,
                         in_synchronized[port][i] = std::polar(magnitude, phase);
                     }
                 }
+                if (abs(phase_difference[port]) <= 0.001 && index[port] == 0) {
+                    for (int i = 0; i < d_fft_size; ++i) {
+                        in_synchronized[port][i] = in[i];
+                    }
+                }
+
                 output_type* out = static_cast<output_type*>(output_items[port]);
                 std::copy(
                     in_synchronized[port].begin(), in_synchronized[port].end(), out);
