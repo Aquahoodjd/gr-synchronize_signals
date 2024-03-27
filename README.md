@@ -6,20 +6,14 @@ Every signals from other input ports are synchronized to first ('in0') signal an
 
 Tested on GNU Radio Companion 3.10.7.0 (Python 3.10.12).
 
-To build and test:
+To build/rebuild and test (in terminal):
 ```
-mkdir build 
-cd build 
-cmake .. 
-make -j4 
-sudo make install 
-sudo ldconfig
-gnuradio-companion ../examples/testSynchronizeSignals.grc
+sh rebuild.sh
 ```
-
-
-To rebuild (in build folder) and test:
+or:
 ```
+mkdir build
+cd build
 sudo make uninstall
 cd ..
 sudo rm -r build

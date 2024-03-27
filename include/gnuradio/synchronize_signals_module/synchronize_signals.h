@@ -1,3 +1,4 @@
+// synchronize_signals.h
 #ifndef INCLUDED_SYNCHRONIZE_SIGNALS_MODULE_SYNCHRONIZE_SIGNALS_H
 #define INCLUDED_SYNCHRONIZE_SIGNALS_MODULE_SYNCHRONIZE_SIGNALS_H
 
@@ -8,7 +9,7 @@ namespace gr {
 namespace synchronize_signals_module {
 
 /*!
- * \brief <+description of block+>
+ * \brief This class represents a block that synchronizes signals in a GNU Radio flowgraph.
  * \ingroup synchronize_signals_module
  *
  */
@@ -18,24 +19,20 @@ public:
     typedef std::shared_ptr<synchronize_signals> sptr;
 
     /*!
-     * \brief Return a shared_ptr to a new instance of
-     * synchronize_signals_module::synchronize_signals.
+     * \brief Return a shared_ptr to a new instance of synchronize_signals_module::synchronize_signals.
      *
-     * To avoid accidental use of raw pointers,
-     * synchronize_signals_module::synchronize_signals's constructor is in a private
-     * implementation class. synchronize_signals_module::synchronize_signals::make is the
-     * public interface for creating new instances.
-     * \param synchronize The new synchronize state
-     * \param fft_size Size of FFT
-     * \param num_ports Number of ports
+     * \param fft_size The size of the Fast Fourier Transform (FFT) to be used.
+     * \param synchronize The initial synchronization state. If true, the block will start in synchronization mode.
+     * \param num_ports The number of input and output ports.
      */
     static sptr make(int fft_size, bool synchronize, int num_ports);
+    
     /*!
-     * \brief Set the synchronize state
+     * \brief Set the synchronization state.
      *
-     * This method allows you to dynamically change the synchronize state of the block.
+     * This method allows you to dynamically change the synchronization state of the block.
      *
-     * \param synchronize The new synchronize state
+     * \param synchronize The new synchronization state. If true, the block will switch to synchronization mode.
      */
     virtual void set_synchronization(bool synchronize) = 0;
     virtual bool synchronize() const = 0;

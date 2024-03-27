@@ -1,3 +1,4 @@
+// synchronize_signals_pydoc_template.h
 #include "pydoc_macros.h"
 #define D(...) DOC(gr, synchronize_signals_module, __VA_ARGS__)
 

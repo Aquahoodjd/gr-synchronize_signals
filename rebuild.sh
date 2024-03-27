@@ -1,4 +1,5 @@
 #!/bin/sh
+mkdir build
 cd build
 sudo make uninstall
 cd ..
